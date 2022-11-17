@@ -1,0 +1,36 @@
+@import "../../scss/abstracts/variables";
+.button__primary {
+  color: $mainBg;
+  background-color: $purple;
+  padding: 5px 20px;
+  border-radius: 10px;
+  transition: all 0.35s;
+  &:hover {
+    background-color: #540897;
+    transform: scale(1.02);
+  }
+}
+
+.button__warning {
+  color: $mainBg;
+  background-color: $orange;
+  padding: 5px 20px;
+  border-radius: 10px;
+  transition: all 0.35s;
+  &:hover {
+    background-color: #f36b39;
+    transform: scale(1.02);
+  }
+}
+
+.button__danger {
+  color: $mainBg;
+  background-color: $red;
+  padding: 5px 20px;
+  border-radius: 10px;
+  transition: all 0.35s;
+  &:hover {
+    background-color: #9e0e04;
+    transform: scale(1.02);
+  }
+}

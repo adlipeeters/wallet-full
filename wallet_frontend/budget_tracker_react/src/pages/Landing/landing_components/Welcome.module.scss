@@ -1,0 +1,93 @@
+.main {
+  height: calc(100vh - 75px);
+  background-color: #00000000;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  // background: linear-gradient(90deg, #00d2ff 0%, #3a47d5 100%);
+  // background: linear-gradient(90deg, #3a47d5 0%, #00d2ff 100%);
+  background-image: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  animation: fadeIn 1s;
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.title {
+  color: #fff;
+  font-size: 48px;
+  @media screen and (max-width: 1000px) {
+    font-size: 28px;
+  }
+}
+
+.getStartedBtn {
+  margin-top: 20px;
+
+  background-image: linear-gradient(
+    to right,
+    #f2994a 0%,
+    #f2c94c 51%,
+    #f2994a 100%
+  );
+
+  // margin: 10px;
+  padding: 10px 30px;
+  text-align: center;
+  // text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+
+  &:hover {
+    background-position: right center;
+    color: #fff;
+    text-decoration: none;
+  }
+}
+
+.secondColumn {
+  @media screen and (max-width: 600px) {
+    margin-right: 20px;
+  }
+}
+
+.btn-grad {
+  background-image: linear-gradient(
+    to right,
+    #f2994a 0%,
+    #f2c94c 51%,
+    #f2994a 100%
+  );
+  margin: 10px;
+  padding: 15px 45px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  border-radius: 10px;
+  display: block;
+}
+
+.btn-grad:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
