@@ -8,13 +8,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { styled } from '@mui/system'
 import Button from '../../../components/button/Button'
 import Notification from '../../../components/notification/Notification'
+import FormControl from '@mui/material/FormControl';
+import Container from '@mui/material/Container';
 
 import { useAddCategoryMutation } from '../../../features/category/categoryApiSlice'
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#8624DB'
+            main: '#2575fc'
         },
     },
 });
@@ -65,38 +67,42 @@ export default function FormDialog({ open, handleClose }) {
                 <DialogContent>
                     <ThemeProvider theme={theme}>
                         <Wrapper>
-                            <TextField
-                                autoFocus
-                                autoComplete="off"
-                                margin="dense"
-                                label="Name"
-                                type="text"
-                                name="name"
-                                value={data.name}
-                                onChange={handleChange}
-                                fullWidth
-                                color="primary"
-                                variant="standard"
-                                sx={{ background: '' }}
-                                InputProps={{
-                                    sx: {
-                                        "& input": {
-                                            color: '#4E4D4F',
-                                            borderColor: '#8624DB'
+                            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                                <TextField
+                                    autoFocus
+                                    autoComplete="off"
+                                    margin="dense"
+                                    label="Name"
+                                    type="text"
+                                    name="name"
+                                    value={data.name}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    color="primary"
+                                    variant="standard"
+                                    sx={{ background: '' }}
+                                    InputProps={{
+                                        sx: {
+                                            "& input": {
+                                                color: '#4E4D4F',
+                                                borderColor: '#8624DB'
+                                            }
                                         }
-                                    }
-                                }}
-                            />
+                                    }}
+                                />
+                            </FormControl>
                         </Wrapper>
                     </ThemeProvider>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} type="info" title="Cancel"></Button>
-                    <Button onClick={handleSubmit} type="primary" title="Save" />
+                    <Container sx={{ textAlign: 'right', marginBottom: '10px' }}>
+                        <Button onClick={handleClose} type="info" title="Cancel" margin="0 10px 0 0" />
+                        <Button onClick={handleSubmit} type="primary" title="Save" />
+                    </Container>
                 </DialogActions>
             </Dialog>
             {isSuccess &&
-                <Notification isOpen={true} title="The category was successfully added!" />
+                <Notification isOpen={true} title="The category was successfully added!" type="success" vertical="top" horizontal="right"/>
             }
         </>
     );

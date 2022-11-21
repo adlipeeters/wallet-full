@@ -16,11 +16,13 @@ import InputLabel from '@mui/material/InputLabel';
 import { useEditTransactionMutation } from '../../../features/transaction/transactionApiSlice'
 import Select from '@mui/material/Select'
 import CategoriesOptions from './CategoriesOptions';
+import Container from '@mui/material/Container';
+
 
 const theme = createTheme({
     palette: {
         primary: {
-            main: '#8624DB'
+            main: '#2575fc'
         },
     },
 });
@@ -125,12 +127,14 @@ export default function FormDialog({ open, handleClose, modalData }) {
                     </ThemeProvider>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} type="info" title="Cancel"></Button>
-                    <Button onClick={handleSubmit} type="primary" title="Save" />
+                    <Container sx={{ textAlign: 'right', marginBottom: '10px' }}>
+                        <Button onClick={handleClose} type="info" title="Cancel" margin="0 10px 0 0"></Button>
+                        <Button onClick={handleSubmit} type="primary" title="Save" />
+                    </Container>
                 </DialogActions>
             </Dialog>
             {isSuccess &&
-                <Notification isOpen={true} title="The account was successfully edited!" />
+                <Notification isOpen={true} title="Transaction was successfully edited!" type="success" vertical="top" horizontal="right" />
             }
         </>
     );

@@ -23,6 +23,7 @@ import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import { parseISO, formatDistanceToNow, formatDistanceToNowStrict, toISOString } from 'date-fns';
 
 
 import EditModal from './EditModal'
@@ -138,6 +139,7 @@ export default function CustomPaginationActionsTable() {
         isError,
         error
     } = useGetTransactionsQuery()
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -153,7 +155,6 @@ export default function CustomPaginationActionsTable() {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
-
     let tableData
 
     if (isLoading || rows.length === 0) {
@@ -173,7 +174,7 @@ export default function CustomPaginationActionsTable() {
                             <TableRow>
                                 <TableCell >Amount</TableCell>
                                 <TableCell align="center">Type</TableCell>
-                                <TableCell align="center">Date</TableCell>
+                                <TableCell align="center">Date/Time</TableCell>
                                 <TableCell align="center">Category</TableCell>
                                 <TableCell align="center">Account</TableCell>
                                 <TableCell align="right">Actions</TableCell>
@@ -212,7 +213,9 @@ export default function CustomPaginationActionsTable() {
                                         </>
                                     }</TableCell>
                                     <TableCell align="center">
-                                        {new Date(row.createdAt).toLocaleDateString("en-US")}
+                                        {
+                                            formatDistanceToNowStrict(parseISO(row.createdAt))
+                                        }
                                     </TableCell>
                                     <TableCell align="center">
                                         {row?.category?.name}
@@ -223,12 +226,12 @@ export default function CustomPaginationActionsTable() {
                                     <TableCell align="right">
                                         <Tooltip title="Edit">
                                             <IconButton aria-label="Example" onClick={() => handleClickOpen(row.id, row.type, row.amount, row.category.id)}>
-                                                <ModeEditOutlineOutlinedIcon sx={{ color: '#8624DB' }} />
+                                                <ModeEditOutlineOutlinedIcon sx={{ color: '#2575fc' }} />
                                             </IconButton>
                                         </Tooltip>
                                         <Tooltip title="Delete">
                                             <IconButton aria-label="Example" onClick={() => handleClickOpenDelete(row.id)}>
-                                                <DeleteOutlinedIcon sx={{ color: '#8624DB' }} />
+                                                <DeleteOutlinedIcon sx={{ color: '#2575fc' }} />
                                             </IconButton>
                                         </Tooltip>
                                     </TableCell>

@@ -15,9 +15,80 @@ import Tooltip from '@mui/material/Tooltip';
 import EditModal from './EditModal'
 import DeleteModal from './DeleteModal'
 import { useGetAccountsQuery } from '../../../features/account/accountApiSlice';
+import FirstPageIcon from '@mui/icons-material/FirstPage';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import LastPageIcon from '@mui/icons-material/LastPage';
+import { useTheme } from '@mui/material/styles';
+import PropTypes from 'prop-types';
+import TableFooter from '@mui/material/TableFooter';
+import TablePagination from '@mui/material/TablePagination';
+
+
 
 import { useDispatch } from 'react-redux'
 import { setCategories } from '../../../features/account/accountSlice'
+
+function TablePaginationActions(props) {
+    const theme = useTheme();
+    const { count, page, rowsPerPage, onPageChange } = props;
+
+    const handleFirstPageButtonClick = (event) => {
+        onPageChange(event, 0);
+    };
+
+    const handleBackButtonClick = (event) => {
+        onPageChange(event, page - 1);
+    };
+
+    const handleNextButtonClick = (event) => {
+        onPageChange(event, page + 1);
+    };
+
+    const handleLastPageButtonClick = (event) => {
+        onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+    };
+
+    return (
+        <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+            <IconButton
+                onClick={handleFirstPageButtonClick}
+                disabled={page === 0}
+                aria-label="first page"
+            >
+                {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+            </IconButton>
+            <IconButton
+                onClick={handleBackButtonClick}
+                disabled={page === 0}
+                aria-label="previous page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+            </IconButton>
+            <IconButton
+                onClick={handleNextButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="next page"
+            >
+                {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+            </IconButton>
+            <IconButton
+                onClick={handleLastPageButtonClick}
+                disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+                aria-label="last page"
+            >
+                {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+            </IconButton>
+        </Box>
+    );
+}
+
+TablePaginationActions.propTypes = {
+    count: PropTypes.number.isRequired,
+    onPageChange: PropTypes.func.isRequired,
+    page: PropTypes.number.isRequired,
+    rowsPerPage: PropTypes.number.isRequired,
+};
 
 export default function AccountsTable() {
     // edit modal
@@ -62,22 +133,32 @@ export default function AccountsTable() {
 
     const {
         // data: accounts,
-        data,
+        data: rows,
         isLoading,
         isSuccess,
         isError,
         error
     } = useGetAccountsQuery()
 
-    // React.useEffect(() => {
-    //     if (isSuccess) {
-    //         // dispatch(setCategories(...data))
-    //     }
-    // }, [isSuccess, data, dispatch])
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     let tableData
 
-    if (isLoading || data.length === 0) {
+    if (isLoading || rows.length === 0) {
         tableData = <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <CircularProgress sx={{ color: '#2575fc' }} />
         </Box>
@@ -98,7 +179,10 @@ export default function AccountsTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {isSuccess && data?.map((row) => (
+                        {(rowsPerPage > 0
+                            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            : rows
+                        ).map((row) => (
                             <TableRow
                                 key={row.id}
                                 sx={{
@@ -111,7 +195,6 @@ export default function AccountsTable() {
                                     {row.name}
                                 </TableCell>
                                 <TableCell align="center">{row.amount}</TableCell>
-                                {/* <TableCell align="center">{row.status}</TableCell> */}
                                 <TableCell align="right">
                                     <Tooltip title="Edit">
                                         <IconButton aria-label="Example" onClick={() => handleClickOpen(row.id, row.name, row.amount)}>
@@ -126,7 +209,32 @@ export default function AccountsTable() {
                                 </TableCell>
                             </TableRow>
                         ))}
+                        {emptyRows > 0 && (
+                            <TableRow style={{ height: 53 * emptyRows }}>
+                                <TableCell colSpan={6} />
+                            </TableRow>
+                        )}
                     </TableBody>
+                    <TableFooter>
+                        <TableRow>
+                            <TablePagination
+                                rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                                colSpan={6}
+                                count={rows.length}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                SelectProps={{
+                                    inputProps: {
+                                        'aria-label': 'rows per page',
+                                    },
+                                    native: true,
+                                }}
+                                onPageChange={handleChangePage}
+                                onRowsPerPageChange={handleChangeRowsPerPage}
+                                ActionsComponent={TablePaginationActions}
+                            />
+                        </TableRow>
+                    </TableFooter>
                 </Table>
             </TableContainer>
             <EditModal open={open} handleClose={handleClose} modalData={editData} key={editData.id} />

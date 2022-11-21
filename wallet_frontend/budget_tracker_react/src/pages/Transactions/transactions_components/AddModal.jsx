@@ -152,7 +152,7 @@ export default function FormDialog({ open, handleClose }) {
                 </DialogActions>
             </Dialog>
             {isSuccess &&
-                <Notification isOpen={true} title="The transaction was completed successfully!" />
+                <Notification isOpen={true} title="The transaction was completed successfully!" type="success" vertical="top" horizontal="right"/>
             }
         </>
     );

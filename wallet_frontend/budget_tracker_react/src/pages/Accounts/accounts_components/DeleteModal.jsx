@@ -10,6 +10,7 @@ import Button from '../../../components/button/Button'
 
 import { useDeleteAccountMutation } from '../../../features/account/accountApiSlice'
 import Notification from '../../../components/notification/Notification'
+import Container from '@mui/material/Container';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -36,18 +37,21 @@ export default function AlertDialogSlide({ open, handleClose, id }) {
                 keepMounted
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
-                PaperProps={{ sx: { borderRadius: '15px' } }}
+                PaperProps={{ sx: { borderRadius: '15px', width: '275px', textAlign: 'center' } }}
             >
                 <DialogTitle>{"Delete this account ?"}</DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{ textAlign: 'center' }}>
+                    Are you sure?
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} type="info" title="Cancel"></Button>
-                    <Button onClick={handleSubmit} type="danger" title="Delete" />
+                    <Container sx={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                        <Button onClick={handleClose} type="info" title="Cancel"></Button>
+                        <Button onClick={handleSubmit} type="danger" title="Delete" />
+                    </Container>
                 </DialogActions>
             </Dialog>
             {isSuccess &&
-                <Notification isOpen={true} title="The account was successfully deleted!" />
+                <Notification isOpen={true} title="The account was successfully deleted!" type="warning" vertical="top" horizontal="right" />
             }
         </>
     );

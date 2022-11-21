@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import Box from '../../components/box/Box'
 import AccountsTable from './accounts_components/AccountsTable'
+import TableWithPagination from './accounts_components/TableWithPagination'
 import AddModal from './accounts_components/AddModal'
 // import Button from '@mui/material/Button';
 import Button from '../../components/button/Button'
@@ -46,7 +47,8 @@ export const Accounts = (props) => {
                     </div>
                 </div>
                 <AddModal open={open} handleClose={handleClose} />
-                <AccountsTable />
+                {/* <AccountsTable /> */}
+                <TableWithPagination />
             </div>
         </div>
     )

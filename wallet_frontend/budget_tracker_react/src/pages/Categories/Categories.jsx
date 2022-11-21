@@ -5,6 +5,7 @@ import AddModal from './categories_components/AddModal'
 // import Button from '@mui/material/Button';
 import Button from '../../components/button/Button'
 import CategoriesTable from './categories_components/CategoriesTable'
+import TableWithPagination from './categories_components/TableWithPagination'
 
 const Categories = () => {
     const [open, setOpen] = useState(false);
@@ -47,7 +48,8 @@ const Categories = () => {
                     </div>
                 </div>
                 <AddModal open={open} handleClose={handleClose} />
-                <CategoriesTable />
+                {/* <CategoriesTable /> */}
+                <TableWithPagination />
             </div>
         </div>
     )

@@ -44,7 +44,6 @@ export default function PositionedSnackbar({ isOpen, title, vertical, horizontal
 
     return (
         <div>
-            {/* {buttons} */}
             <Snackbar
                 anchorOrigin={{ vertical, horizontal }}
                 open={state.open}
@@ -53,11 +52,6 @@ export default function PositionedSnackbar({ isOpen, title, vertical, horizontal
                 key={vertical + horizontal}
                 autoHideDuration={3500}
                 TransitionComponent={TransitionRight}
-            // ContentProps={{
-            //   sx: {
-            //     background: "green"
-            //   }
-            // }}
             >
                 <Alert
                     sx={{

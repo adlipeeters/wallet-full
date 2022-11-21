@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import Button from '../../../components/button/Button'
+import Container from '@mui/material/Container';
 
 import { useDeleteCategoryMutation } from '../../../features/category/categoryApiSlice'
 import Notification from '../../../components/notification/Notification'
@@ -35,18 +36,20 @@ const DeleteModal = ({ open, handleClose, id }) => {
                 keepMounted
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
-                PaperProps={{ sx: { borderRadius: '15px' } }}
+                PaperProps={{ sx: { borderRadius: '15px', width: '275px', textAlign: 'center' } }}
             >
                 <DialogTitle>{"Delete this category ?"}</DialogTitle>
                 <DialogContent>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} type="info" title="Cancel"></Button>
-                    <Button onClick={handleSubmit} type="danger" title="Delete" />
+                    <Container sx={{ marginBottom: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                        <Button onClick={handleClose} type="info" title="Cancel"></Button>
+                        <Button onClick={handleSubmit} type="danger" title="Delete" />
+                    </Container>
                 </DialogActions>
             </Dialog>
             {isSuccess &&
-                <Notification isOpen={true} title="The category was successfully deleted!" />
+                <Notification isOpen={true} title="The category was successfully deleted!" type="warning" vertical="top" horizontal="right"/>
             }
         </>
     )
