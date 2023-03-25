@@ -8,15 +8,15 @@ import * as bcrypt from 'bcrypt';
 export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
-  generateJWT(user: User): Observable<string> {
-    return from(this.jwtService.signAsync({ user }));
+  async generateJWT(user: User): Promise<string> {
+    return await this.jwtService.signAsync({ user });
   }
 
-  hashPassword(password: string): Observable<string> {
-    return from<string>(bcrypt.hash(password, 12));
+  async hashPassword(password: string): Promise<string> {
+    return await bcrypt.hash(password, 12);
   }
 
-  comparePasswords(newPassword: string, passwortHash: string): Observable<any> {
-    return from(bcrypt.compare(newPassword, passwortHash));
+  comparePasswords(newPassword: string, passwortHash: string): Promise<any> {
+    return bcrypt.compare(newPassword, passwortHash);
   }
 }

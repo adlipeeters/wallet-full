@@ -22,7 +22,8 @@ export class UserEntity {
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  // @Column({ unique: true })
+  @Column()
   username: string;
 
   @Column({ unique: true })

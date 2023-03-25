@@ -13,6 +13,7 @@ import {
   UploadedFile,
   Request,
   Res,
+  Req,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { User, UserRole } from '../models/user.interface';
@@ -32,6 +33,9 @@ import { v4 as uuidv4 } from 'uuid';
 import path = require('path');
 import { join } from 'path';
 import { UserIsUserGuard } from 'src/auth/guards/UserIsUser.guard';
+import { Response } from 'express';
+import { JwtExpiration } from 'src/auth/guards/jwt-expiration';
+// import { Request as ExpressRequest } from 'express';
 
 export const storage = {
   storage: diskStorage({
@@ -45,35 +49,52 @@ export const storage = {
   }),
 };
 
+interface AuthenticatedRequest extends Request {
+  user: any;
+}
+
 @Controller('users')
 export class ControllerController {
   constructor(private userService: UserService) {}
 
   @Post('register')
   // eslint-disable-next-line @typescript-eslint/ban-types
-  create(@Body() user: User): Observable<Object> {
-    console.log(user);
-    return this.userService.create(user).pipe(
-      map((user: User) => user),
-      catchError((err) => of({ error: err.message })),
-    );
-    // return this.userService.create();
+  async create(@Body() user: User): Promise<any> {
+    return this.userService.create(user);
   }
 
   @Post('login')
   // eslint-disable-next-line @typescript-eslint/ban-types
-  login(@Body() user: User): Observable<Object> {
-    // return this.userService.login(user).pipe(
-    //   map((jwt: string) => {
-    //     return { access_token: jwt };
-    //   }),
-    return this.userService.login(user);
-    // );
+  async login(
+    @Body() user: User,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<any> {
+    const res = await this.userService.login(user);
+
+    response.cookie('jwt', res.access_token, {
+      httpOnly: true,
+    });
+    response.cookie('logged_in', true);
+
+    return { userInfo: res.user };
   }
 
+  @Post('logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('jwt');
+    response.clearCookie('logged_in');
+  }
+
+  // @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param() params): Observable<User | string> {
-    return this.userService.findOne(params.id);
+  findOne(
+    @Param() params,
+    @Req() request: AuthenticatedRequest,
+  ): Observable<User | string> {
+    // console.log(request.user);
+    // return this.userService.findOne(params.id);
+    return this.userService.findOne(request.user.id);
   }
 
   // @hasRoles(UserRole.ADMIN)
@@ -113,7 +134,13 @@ export class ControllerController {
 
   // @UseGuards(JwtAuthGuard, UserIsUserGuard)
   @Put(':id')
-  updateOne(@Param('id') id: string, @Body() user: User): Observable<any> {
+  // @UseInterceptors(FileInterceptor('file', storage))
+  updateOne(
+    // @UploadedFile() file,
+    @Param('id') id: string,
+    @Body() user: User,
+  ): Promise<any> {
+    console.log('asd');
     return this.userService.updateOne(Number(id), user);
   }
 
@@ -122,10 +149,12 @@ export class ControllerController {
     return this.userService.confirmAccount(Number(id), user);
   }
 
-  @UseGuards(JwtAuthGuard, UserIsUserGuard)
-  @Put('reset-password/:id')
-  updatePassword(@Param() params, @Body() user) {
-    return this.userService.updatePassword(Number(params.id), user);
+  // @UseGuards(JwtAuthGuard, UserIsUserGuard)
+  @UseGuards(JwtAuthGuard)
+  // @Put('reset-password/:id')
+  @Post('reset-password')
+  async updatePassword(@Param() params, @Body() user, @Request() req) {
+    return this.userService.updatePassword(Number(req.user.id), user);
   }
 
   @UseGuards(JwtAuthGuard, RolesGuard)
@@ -141,29 +170,27 @@ export class ControllerController {
   @UseGuards(JwtAuthGuard)
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', storage))
-  // eslint-disable-next-line @typescript-eslint/ban-types
   uploadFile(@UploadedFile() file, @Request() req) {
     const user: User = req.user;
-    // console.log(user);
-    // console.log(file);
-    return this.userService
-      .updateOne(user.id, { profileImage: file.filename })
-      .pipe(
-        tap((user: User) => console.log(user)),
-        map((user: User) => ({ profileImage: user.profileImage })),
-      );
+    console.log(user.id, file.filename);
+    return this.userService.updateOne(user.id, { profileImage: file.filename });
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('profile-image/:imagename')
-  findProfileImage(
+  async findProfileImage(
     @Param('imagename') imagename,
     @Res() res,
+    @Request() req,
     // eslint-disable-next-line @typescript-eslint/ban-types
-  ): Observable<Object> {
+  ): Promise<any> {
     // console.log(imagename);
-    return of(
-      res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)),
+    // return of(
+    //   res.sendFile(join(process.cwd(), 'uploads/profileimages/' + imagename)),
+    // );
+    const user = await this.userService.findById(req.user.id);
+    res.sendFile(
+      join(process.cwd(), 'uploads/profileimages/' + user.profileImage),
     );
   }
 }

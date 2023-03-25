@@ -23,21 +23,10 @@ export class PaymentService {
     const user = {
       subscription: paymentRequestBody.subscription,
     };
-    console.log(user);
-    console.log('asd');
     const saveUserSubscription = this.userService.updateOne(
       Number(paymentRequestBody.userId),
       user,
     );
-    // const transaction = {
-    //   amount: paymentRequestBody.amount,
-    //   type: TransactionType.SUBSCRIPTION,
-    // };
-    // const saveSubscsriptionTransaction = this.transactionService.create(
-    //   user,
-    //   transaction,
-    // );
-
     if (saveUserSubscription) {
       return this.stripe.paymentIntents.create({
         amount: sumAmount * 100,

@@ -32,7 +32,6 @@ import DeleteModal from './DeleteModal'
 
 import { useGetTransactionsQuery } from '../../../features/transaction/transactionApiSlice'
 
-
 function TablePaginationActions(props) {
     const theme = useTheme();
     const { count, page, rowsPerPage, onPageChange } = props;
@@ -159,7 +158,7 @@ export default function CustomPaginationActionsTable() {
 
     if (isLoading || rows.length === 0) {
         tableData = <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <CircularProgress sx={{ color: '#8624DB' }} />
+            <CircularProgress sx={{ color: '#2575fc' }} />
         </Box>
     } else if (isSuccess) {
         tableData = (
@@ -187,7 +186,7 @@ export default function CustomPaginationActionsTable() {
                             ).map((row) => (
                                 <TableRow key={row.id}>
                                     <TableCell component="th" scope="row" >
-                                        {row.amount}
+                                        RON {row.amount}
                                     </TableCell>
                                     <TableCell align="center">{row.type === 'income' ?
                                         <>

@@ -65,7 +65,6 @@ export default function FormDialog({ open, handleClose }) {
 
     return (
         <>
-
             <Dialog open={open} onClose={handleClose} sx={{}} fullWidth={true} PaperProps={{ sx: { borderRadius: '15px' } }}>
                 <DialogTitle>Add account</DialogTitle>
                 <DialogContent>

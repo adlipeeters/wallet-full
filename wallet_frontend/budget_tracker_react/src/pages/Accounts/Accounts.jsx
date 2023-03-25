@@ -1,55 +1,51 @@
-import React, { useState } from 'react'
-import Box from '../../components/box/Box'
-import AccountsTable from './accounts_components/AccountsTable'
-import TableWithPagination from './accounts_components/TableWithPagination'
-import AddModal from './accounts_components/AddModal'
-// import Button from '@mui/material/Button';
-import Button from '../../components/button/Button'
+import React, { useState } from "react";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 
-export const Accounts = (props) => {
-    const [open, setOpen] = useState(false);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    return (
-        <div className="row">
-            <div className="col-md-3 mb">
-                <Box>
-
-                </Box>
-            </div>
-            <div className="col-md-3 mb">
-                <Box>
-
-                </Box>
-            </div>
-            <div className="col-md-3 mb">
-                <Box>
-
-                </Box>
-            </div>
-            <div className="col-md-3 mb">
-                <Box>
-
-                </Box>
-            </div>
-            <div className="col-12">
-                <div className="row"></div>
-                <div className="row">
-                    <div className="col-lg-2 col-md-4 col-sm-12 col-xs-12 mt-3 mb-4">
-                        <Button type="primary" onClick={handleClickOpen} title="Add account" />
-                    </div>
-                </div>
-                <AddModal open={open} handleClose={handleClose} />
-                {/* <AccountsTable /> */}
-                <TableWithPagination />
-            </div>
-        </div>
-    )
-}
+export const Accounts = () => {
+  const arr = [1, 2, 3];
+  return (
+    <div style={{ background: "pink" }}>
+      {arr.map((id) => {
+        return (
+          <>
+            <Card sx={{ maxWidth: 345, borderRadius: "15px" }} key={id}>
+              <CardContent
+                sx={{
+                  backgroundImage:
+                    "linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%)",
+                }}
+              >
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="div"
+                  sx={{ color: "white" }}
+                >
+                  Revolut
+                  <AttachMoneyIcon sx={{ float: "right" }} />
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ color: "white" }}
+                >
+                  Balance: 100$
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Edit</Button>
+                <Button size="small">History</Button>
+              </CardActions>
+            </Card>
+          </>
+        );
+      })}
+    </div>
+  );
+};

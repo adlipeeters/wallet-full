@@ -30,7 +30,6 @@ const Welcome = () => {
                 Start saving your money<br /> right now
               </h1>
               <Link to='pricing'>
-
                 <button className={styles.getStartedBtn}>
                   Get Started
                 </button>
@@ -38,7 +37,7 @@ const Welcome = () => {
             </div>
           </div>
         </div>
-      </div >
+      </div>
     </>
   )
 }

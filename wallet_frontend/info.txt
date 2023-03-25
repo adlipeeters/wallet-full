@@ -1,0 +1,34 @@
+Sales -> Category with Most expenses
+Orders -> Category with the least expenses
+Revenue -> Category with most income
+Revenue -> Category with the least income
+
+
+
+
+import React, { useState } from "react";
+
+export const Accounts = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+  return (
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        backgroundColor: isHovered ? "blue" : "red",
+        cursor: isHovered ? "pointer" : "",
+        transitionDuration: "300ms",
+      }}
+    >
+      <h1>Hello World!</h1>
+    </div>
+  );
+};

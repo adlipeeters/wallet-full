@@ -3,6 +3,7 @@ import { Category } from 'src/category/model/category.entity';
 import { UserEntity } from 'src/user/models/user.entity';
 
 import {
+  BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
@@ -34,11 +35,16 @@ export class Transaction {
   @ManyToOne((type) => AccountEntity, (account) => account.transactions)
   account: AccountEntity;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @BeforeInsert()
+  setCreatedAt() {
+    this.createdAt = new Date();
+  }
 
   @BeforeUpdate()
   updateTimestamp() {

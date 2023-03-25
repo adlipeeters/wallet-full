@@ -13,6 +13,7 @@ const UserInfo = ({ user }) => {
 
     useEffect(() => {
         const url = "http://localhost:3500/users/profile-image/" + user.profileImage;
+        // const url = "http://185.125.109.34:3000/users/profile-image/" + user.profileImage;
 
         const getImage = async () => {
             try {

@@ -8,20 +8,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 @Module({
   imports: [
     MailerModule.forRootAsync({
-      // imports: [ConfigModule], // import module if not enabled globally
       useFactory: async (config: ConfigService) => ({
-        // transport: config.get("MAIL_TRANSPORT"),
-        // or
         transport: {
-          host: 'smtp.gmail.com',
-          port: 465,
-          secure: true,
-          ignoreTLS: false,
+          host: 'smtp-relay.sendinblue.com',
+          port: 587,
+          secure: false,
+          // ignoreTLS: true,
           auth: {
-            // user: 'usatii.andrei062000@gmail.com',
-            user: config.get('EMAIL_USER'),
-            // pass: 'zplxmspnmhjeaazh',
-            pass: config.get('EMAIL_PASSWORD'),
+            user: 'adlipeeters@gmail.com',
+            // user: config.get('EMAIL_USER'),
+            pass: 'OSqPM1jJ2KEbk9VQ',
+            // pass: config.get('EMAIL_PASSWORD'),
           },
         },
         defaults: {

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 
 export const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:3500',
+    // baseUrl: 'http://185.125.109.34:3000',
+    // baseUrl: 'https://wallet-demo-app.herokuapp.com',
     mode: 'cors',
     // credentials: 'include',
     prepareHeaders: (headers, { getState }) => {

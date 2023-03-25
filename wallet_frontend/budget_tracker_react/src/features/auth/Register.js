@@ -27,7 +27,6 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log(credentials)
-
         try {
             // console.log(user, pwd)
             let data = { ...credentials }

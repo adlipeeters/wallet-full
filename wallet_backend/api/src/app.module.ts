@@ -16,9 +16,21 @@ import { SubscriptionModule } from './subscription/subscription.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    // TypeOrmModule.forRoot({
+    //   type: 'postgres',
+    //   url: process.env.DATABASE_URL,
+    //   autoLoadEntities: true,
+    //   synchronize: true,
+    // }),
     TypeOrmModule.forRoot({
-      type: 'postgres',
-      url: process.env.DATABASE_URL,
+      type: 'mysql',
+      // host: 'db',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      // password: 'root',
+      password: '',
+      database: 'my_wallet',
       autoLoadEntities: true,
       synchronize: true,
     }),

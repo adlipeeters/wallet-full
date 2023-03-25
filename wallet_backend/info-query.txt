@@ -1,0 +1,18 @@
+ async getTimeSheets(company_id: number, related_id?: number, related_to?: string): Promise<TimeSheet[]> {
+    const queryBuilder = this.timeSheetRepository
+      .createQueryBuilder('timesheet')
+      .leftJoinAndSelect('timesheet.user', 'user')
+      .leftJoinAndSelect('timesheet.task', 'task')
+      .where('timesheet.company_id = :company_id', { company_id })
+      .andWhere('timesheet.status != 0')
+      .orderBy('timesheet.id', 'DESC');
+
+    if (related_id && related_to) {
+      queryBuilder.andWhere(`timesheet.${related_to} = :related_id`, { related_id });
+    }
+
+    return queryBuilder.getMany();
+  }
+
+
+npm i --save cookie-parser

@@ -159,7 +159,7 @@ const CategoriesTable = () => {
     let tableData
     if (isLoading || rows.length === 0) {
         tableData = <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <CircularProgress sx={{ color: '#8624DB' }} />
+            <CircularProgress sx={{ color: '#2575fc' }} />
         </Box>
     }
     else if (isSuccess) {
