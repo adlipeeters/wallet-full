@@ -1,21 +1,23 @@
 import { AccountEntity } from 'src/account/model/account.entity';
 import { Category } from 'src/category/model/category.entity';
 import { UserEntity } from 'src/user/models/user.entity';
-
+import { Transaction } from 'src/transaction/model/transaction.entity';
 import {
   BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { TransactionType } from './transaction.interface';
-import { ScheduledTransaction } from 'src/scheduled_transactions/model/scheduledTransaction.entity';
-import { BillReminderEntity } from 'src/bill_reminders/model/bill_reminder.entity';
+import {
+  FrequencyType,
+  TransactionType,
+} from './scheduledTransaction.interface';
 
-@Entity('transaction')
-export class Transaction {
+@Entity('scheduled_transaction')
+export class ScheduledTransaction {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -37,20 +39,26 @@ export class Transaction {
   @ManyToOne((type) => AccountEntity, (account) => account.transactions)
   account: AccountEntity;
 
-  @ManyToOne(
-    () => ScheduledTransaction,
-    (scheduledTransaction) => scheduledTransaction.transactions,
+  @OneToMany(
+    () => Transaction,
+    (transaction) => transaction.scheduledTransaction,
   )
-  scheduledTransaction: ScheduledTransaction;
-
-  @ManyToOne((type) => BillReminderEntity, (bill) => bill.transactions)
-  bill: BillReminderEntity;
+  transactions: Transaction[];
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @Column({ type: 'date' })
+  nextCronDate: Date;
+
+  @Column()
+  frequency: FrequencyType;
+
+  @Column({ default: 1 })
+  isActive: number;
 
   @BeforeInsert()
   setCreatedAt() {

@@ -8,23 +8,24 @@ import {
   BeforeInsert,
   OneToMany,
 } from 'typeorm';
+import { NotificationType } from './notification.interface';
 
-@Entity('subscription')
-export class SubscriptionEntity {
+@Entity('notifications')
+export class NotificationEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
-  @Column({ default: 1 })
-  status: number;
+  @Column()
+  description: string;
 
   @Column()
-  price: number;
+  type: NotificationType;
 
-  @Column()
-  type: number;
+  @Column({ default: 0 })
+  isRead: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
@@ -32,7 +33,7 @@ export class SubscriptionEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
 
-  @OneToMany((type) => UserEntity, (user) => user.subscription)
+  @ManyToOne(() => UserEntity, (user) => user.notifications)
   user: UserEntity;
 
   @BeforeUpdate()

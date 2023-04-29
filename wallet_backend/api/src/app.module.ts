@@ -12,6 +12,10 @@ import { AccountModule } from './account/account.module';
 import { MailModule } from './mail/mail.module';
 import { PaymentsModule } from './payments/payments.module';
 import { SubscriptionModule } from './subscription/subscription.module';
+import { ScheduledTransactionsModule } from './scheduled_transactions/scheduled_transactions.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { BillRemindersModule } from './bill_reminders/bill_reminders.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -43,6 +47,10 @@ import { SubscriptionModule } from './subscription/subscription.module';
     MailModule,
     PaymentsModule,
     SubscriptionModule,
+    ScheduledTransactionsModule,
+    ScheduleModule.forRoot(),
+    BillRemindersModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

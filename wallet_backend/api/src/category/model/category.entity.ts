@@ -1,4 +1,5 @@
 import { Transaction } from 'src/transaction/model/transaction.entity';
+import { TransactionType } from 'src/transaction/model/transaction.interface';
 import { UserEntity } from 'src/user/models/user.entity';
 import {
   Entity,
@@ -20,6 +21,9 @@ export class Category {
 
   @Column({ default: 1 })
   status: number;
+
+  @Column({ type: 'enum', enum: TransactionType })
+  type: TransactionType;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

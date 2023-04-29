@@ -27,6 +27,7 @@ export class UserIsUserGuard implements CanActivate {
     return this.userService.findOne(user.id).pipe(
       map((user: User) => {
         let hasPermission = false;
+        console.log(user.id, params.id);
 
         if (user.id === Number(params.id)) {
           hasPermission = true;

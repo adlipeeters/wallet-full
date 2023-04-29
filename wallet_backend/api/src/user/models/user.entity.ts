@@ -13,6 +13,8 @@ import { Category } from 'src/category/model/category.entity';
 import { Transaction } from 'src/transaction/model/transaction.entity';
 import { AccountEntity } from 'src/account/model/account.entity';
 import { SubscriptionEntity } from 'src/subscription/model/subscription.entity';
+import { BillReminderEntity } from 'src/bill_reminders/model/bill_reminder.entity';
+import { NotificationEntity } from 'src/notifications/model/notification.entity';
 
 @Entity()
 export class UserEntity {
@@ -58,8 +60,14 @@ export class UserEntity {
   @OneToMany((type) => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
 
+  @OneToMany((type) => NotificationEntity, (notification) => notification.user)
+  notifications: NotificationEntity[];
+
   @OneToMany((type) => AccountEntity, (account) => account.user)
-  accounts: Transaction[];
+  accounts: AccountEntity[];
+
+  @OneToMany((type) => BillReminderEntity, (bill) => bill.user)
+  bills: BillReminderEntity[];
 
   @ManyToOne((type) => SubscriptionEntity, (subscription) => subscription.user)
   subscription: SubscriptionEntity;

@@ -99,30 +99,36 @@ export class ControllerController {
 
   // @hasRoles(UserRole.ADMIN)
   // @UseGuards(JwtAuthGuard, RolesGuard)
-  @Get()
-  index(
-    @Query('page') page = 1,
-    @Query('limit') limit = 10,
-    @Query('username') username: string,
-  ): Observable<Pagination<User>> {
-    limit = limit > 100 ? 100 : limit;
+  // @Get()
+  // index(
+  //   @Query('page') page = 1,
+  //   @Query('limit') limit = 10,
+  //   @Query('username') username: string,
+  // ): Observable<Pagination<User>> {
+  //   limit = limit > 100 ? 100 : limit;
 
-    if (username === null || username === undefined) {
-      return this.userService.paginate({
-        page: Number(page),
-        limit: Number(limit),
-        route: 'http://localhost:3000/users',
-      });
-    } else {
-      return this.userService.paginateFilterByUsername(
-        {
-          page: Number(page),
-          limit: Number(limit),
-          route: 'http://localhost:3000/api/users',
-        },
-        { username },
-      );
-    }
+  //   if (username === null || username === undefined) {
+  //     return this.userService.paginate({
+  //       page: Number(page),
+  //       limit: Number(limit),
+  //       route: 'http://localhost:3000/users',
+  //     });
+  //   } else {
+  //     return this.userService.paginateFilterByUsername(
+  //       {
+  //         page: Number(page),
+  //         limit: Number(limit),
+  //         route: 'http://localhost:3000/api/users',
+  //       },
+  //       { username },
+  //     );
+  //   }
+  // }
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Get()
+  index(): Observable<User[]> {
+    return this.userService.findAll();
   }
 
   @hasRoles(UserRole.ADMIN)
@@ -192,5 +198,11 @@ export class ControllerController {
     res.sendFile(
       join(process.cwd(), 'uploads/profileimages/' + user.profileImage),
     );
+  }
+
+  @Post('test-email')
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  async test(): Promise<any> {
+    return this.userService.testEmail();
   }
 }

@@ -30,6 +30,8 @@ export class TransactionService {
         transaction.type,
       );
     }
+
+    console.log(transaction);
     return from(this.transactionRepository.save(transaction)).pipe(
       map((result) => {
         delete result.user;
@@ -64,6 +66,7 @@ export class TransactionService {
   findOne(id: number): Observable<TransactionEntry> {
     return from(
       this.transactionRepository.findOne({
+        relations: ['category', 'account'],
         where: {
           id: id,
         },
@@ -81,7 +84,7 @@ export class TransactionService {
   findAll(id: number): Observable<TransactionEntry[]> {
     return from(
       this.transactionRepository.find({
-        relations: ['user', 'category', 'account'],
+        relations: ['user', 'category', 'account', 'scheduledTransaction'],
         where: {
           // modalitate multipla
           // status: In([0, 1]),

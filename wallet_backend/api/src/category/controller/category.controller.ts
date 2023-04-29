@@ -49,8 +49,9 @@ export class CategoryController {
     return this.categoryService.findAll();
   }
 
-  @hasRoles(UserRole.ADMIN)
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  // @hasRoles(UserRole.ADMIN)
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   deleteOne(@Param() params: CategoryEntry): Observable<any> {
     return this.categoryService.deleteOne(Number(params.id));

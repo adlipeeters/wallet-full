@@ -21,6 +21,9 @@ import {
 } from 'nestjs-typeorm-paginate';
 import { v4 as uuidv4 } from 'uuid';
 import { MailService } from 'src/mail/service/mail.service';
+import { NotificationService } from 'src/notifications/service/notification.service';
+import { NotificationType } from 'src/notifications/model/notification.interface';
+import { format } from 'date-fns';
 
 @Injectable()
 export class UserService {
@@ -29,6 +32,7 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
     private authService: AuthService,
     private mailService: MailService,
+    private notificationService: NotificationService,
   ) {}
 
   // create(user: User): Observable<User> {
@@ -60,6 +64,16 @@ export class UserService {
   //     }),
   //   );
   // }
+
+  async testEmail(): Promise<any> {
+    // return 'Hello bro';
+    // return this.mailService.sendUserConfirmation(
+    //   'token',
+    //   'name',
+    //   'adlipeeters@gmail.com',
+    // );
+    return this.mailService.sendBulkEmailExample();
+  }
 
   async create(user: User): Promise<any> {
     const userExists = await this.userRepository.findOne({
@@ -113,6 +127,7 @@ export class UserService {
       map((users) => {
         users.forEach(function (v) {
           delete v.password;
+          delete v.confirmToken;
         });
         return users;
       }),
@@ -264,7 +279,19 @@ export class UserService {
     if (verifyPassword) {
       const newPassword = await this.authService.hashPassword(user.newPassword);
       try {
-        return this.userRepository.update(id, { password: newPassword });
+        const isPassUpdated = await this.userRepository.update(id, {
+          password: newPassword,
+        });
+        if (isPassUpdated) {
+          const user = await this.userRepository.findOne({ where: { id: id } });
+          this.notificationService.create(user, {
+            name: 'Password Change',
+            type: NotificationType.PASSWORD_CHANGE,
+            description: 'Your password was recently changed',
+          });
+          return true;
+        }
+        // return this.userRepository.update(id, { password: newPassword });
       } catch (error) {
         throw new BadRequestException('Something went wrong');
       }
